@@ -93,7 +93,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const Munro = __webpack_require__(/*! ./models/munro.js */ \"./src/models/munro.js\");\n\nconst MunroListView = __webpack_require__(/*! ./views/munro_list_view.js */ \"./src/views/munro_list_view.js\")\n\ndocument.addEventListener('DOMContentLoaded', () => {\n\n  const munro = new Munro('https://munroapi.herokuapp.com/munros');\n  console.log(munro);\n  munro.getData();\n\n});\n\n\n//# sourceURL=webpack:///./src/app.js?");
+eval("const Munro = __webpack_require__(/*! ./models/munro.js */ \"./src/models/munro.js\");\nconst MunroListView = __webpack_require__(/*! ./views/munro_list_view.js */ \"./src/views/munro_list_view.js\")\n\ndocument.addEventListener('DOMContentLoaded', () => {\n  const munroListContainer = document.querySelector('#munros')\n  const munroListView = new MunroListView(munroListContainer)\n  munroListView.bindEvents();\n\n  const munro = new Munro('https://munroapi.herokuapp.com/munros');\n  console.log(munro);\n  munro.getData();\n\n});\n\n\n//# sourceURL=webpack:///./src/app.js?");
 
 /***/ }),
 
@@ -137,7 +137,7 @@ eval("const RequestHelper = __webpack_require__(/*! ../helpers/request_helper.js
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\nconst MunroView = __webpack_require__(/*! ./munro_view.js */ \"./src/views/munro_view.js\");\n\nconst MunroListView = function () {\n\n};\n\n\nmodule.exports = MunroListView;\n\n\n//# sourceURL=webpack:///./src/views/munro_list_view.js?");
+eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\nconst MunroView = __webpack_require__(/*! ./munro_view.js */ \"./src/views/munro_view.js\");\n\nconst MunroListView = function (container) {\n  this.container = container\n};\n\nMunroListView.prototype.bindEvents = function() {\n  PubSub.subscribe('Munro:munro-data-ready', (evt) =>{\n    this.munros = evt.detail;\n    console.log(this.munros);\n    this.render();\n  })\n}\n\nMunroListView.prototype.render = function() {\n  this.munros.forEach((munro) => {\n    const munroView = new MunroView(this.container, munro);\n    munroView.render();\n  });\n};\n\nmodule.exports = MunroListView;\n\n\n//# sourceURL=webpack:///./src/views/munro_list_view.js?");
 
 /***/ }),
 
@@ -148,7 +148,7 @@ eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/he
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\n\nconst MunroView = function () {\n\n};\n\n\n\nmodule.exports = MunroView;\n\n\n//# sourceURL=webpack:///./src/views/munro_view.js?");
+eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\n\nconst MunroView = function (container, munro) {\n  this.container = container;\n  this.munro = munro;\n};\n\nMunroView.prototype.render = function() {\n  const munroContainer = document.createElement('div');\n\n  const munroName = this.createMunroList();\n  munroContainer.appendChild(munroName)\n  console.log(munroName);\n  this.container.appendChild(munroContainer);\n}\n\n\nMunroView.prototype.createMunroList = function () {\n  const name = document.createElement('ul');\n  this.populateList(name);\n  return name;\n}\n\nMunroView.prototype.populateList = function(list) {\n    const munroListItem  = document.createElement('li');\n    munroListItem.textContent = this.munro.name;\n    list.appendChild(munroListItem);\n    console.log('Munro list item', munroListItem.textContent);\n}\n\nmodule.exports = MunroView;\n\n\n//# sourceURL=webpack:///./src/views/munro_view.js?");
 
 /***/ })
 
