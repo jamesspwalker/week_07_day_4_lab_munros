@@ -11,21 +11,41 @@ MunroView.prototype.render = function() {
   const munroName = this.createMunroList();
   munroContainer.appendChild(munroName)
   console.log(munroName);
-  this.container.appendChild(munroContainer);
+  this.container.appendChild(munroContainer)
+
+
 }
 
 
 MunroView.prototype.createMunroList = function () {
-  const name = document.createElement('ul');
-  this.populateList(name);
-  return name;
+  const munroUl = document.createElement('ul');
+  this.populateListName(munroUl);
+  this.populateListHeight(munroUl);
+  this.populateListMeaning(munroUl);
+  return munroUl;
 }
 
-MunroView.prototype.populateList = function(list) {
-    const munroListItem  = document.createElement('li');
+MunroView.prototype.populateListName = function(list) {
+    const munroListItem  = document.createElement('h3');
     munroListItem.textContent = this.munro.name;
     list.appendChild(munroListItem);
     console.log('Munro list item', munroListItem.textContent);
 }
+
+MunroView.prototype.populateListHeight = function(list) {
+    const munroListItem  = document.createElement('li');
+    munroListItem.textContent = this.munro.height;
+    list.appendChild(munroListItem);
+    console.log('Munro list item', munroListItem.textContent);
+}
+
+MunroView.prototype.populateListMeaning = function(list) {
+    const munroListItem  = document.createElement('li');
+    munroListItem.textContent = this.munro.meaning;
+    list.appendChild(munroListItem);
+    console.log('Munro list item', munroListItem.textContent);
+}
+
+
 
 module.exports = MunroView;
