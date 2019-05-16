@@ -91,9 +91,64 @@
   !*** ./src/app.js ***!
   \********************/
 /*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("const Munro = __webpack_require__(/*! ./models/munro.js */ \"./src/models/munro.js\");\n\nconst MunroListView = __webpack_require__(/*! ./views/munro_list_view.js */ \"./src/views/munro_list_view.js\")\n\ndocument.addEventListener('DOMContentLoaded', () => {\n\n  const munro = new Munro('https://munroapi.herokuapp.com/munros');\n  console.log(munro);\n  munro.getData();\n\n});\n\n\n//# sourceURL=webpack:///./src/app.js?");
+
+/***/ }),
+
+/***/ "./src/helpers/pub_sub.js":
+/*!********************************!*\
+  !*** ./src/helpers/pub_sub.js ***!
+  \********************************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("\n\n//# sourceURL=webpack:///./src/app.js?");
+eval("const PubSub = {\n publish: function (channel, payload) {\n   const event = new CustomEvent(channel, {\n     detail: payload\n   });\n   document.dispatchEvent(event);\n },\n subscribe: function (channel, callback) {\n   document.addEventListener(channel, callback);\n }\n}\n\nmodule.exports = PubSub;\n\n\n//# sourceURL=webpack:///./src/helpers/pub_sub.js?");
+
+/***/ }),
+
+/***/ "./src/helpers/request_helper.js":
+/*!***************************************!*\
+  !*** ./src/helpers/request_helper.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("const RequestHelper = function (url) {\n this.url = url;\n};\n\nRequestHelper.prototype.get = function () {\n return fetch(this.url)\n   .then(response => response.json())\n   .catch(err => console.log(\"Error in get:\", err))\n};\n\nmodule.exports = RequestHelper;\n\n\n//# sourceURL=webpack:///./src/helpers/request_helper.js?");
+
+/***/ }),
+
+/***/ "./src/models/munro.js":
+/*!*****************************!*\
+  !*** ./src/models/munro.js ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("const RequestHelper = __webpack_require__(/*! ../helpers/request_helper.js */ \"./src/helpers/request_helper.js\");\nconst PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\n\nconst Munro = function(url) {\n  this.url = url;\n  this.munros = [];\n};\n\nMunro.prototype.getData = function () {\n  const request = new RequestHelper(this.url);\n\n    request.get()\n      .then((data) => {\n        this.munros = data;\n        PubSub.publish('Munro:munro-data-ready', this.munros);\n        console.log(data);\n      })\n  };\n\nMunro.prototype.handleDataReady = function (munros) {\n  const munroNames = this.getMunroNames(munros);\n  console.log(munroNames);\n}\n\nMunro.prototype.getMunroNames = function (munros) {\n  return munros\n    .map(munro => munro.name)\n}\n\n\nmodule.exports = Munro;\n\n\n//# sourceURL=webpack:///./src/models/munro.js?");
+
+/***/ }),
+
+/***/ "./src/views/munro_list_view.js":
+/*!**************************************!*\
+  !*** ./src/views/munro_list_view.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\nconst MunroView = __webpack_require__(/*! ./munro_view.js */ \"./src/views/munro_view.js\");\n\nconst MunroListView = function () {\n\n};\n\n\nmodule.exports = MunroListView;\n\n\n//# sourceURL=webpack:///./src/views/munro_list_view.js?");
+
+/***/ }),
+
+/***/ "./src/views/munro_view.js":
+/*!*********************************!*\
+  !*** ./src/views/munro_view.js ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\n\nconst MunroView = function () {\n\n};\n\n\n\nmodule.exports = MunroView;\n\n\n//# sourceURL=webpack:///./src/views/munro_view.js?");
 
 /***/ })
 
